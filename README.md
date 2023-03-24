@@ -1,2 +1,2 @@
 # Python for Data Structures 
-My lecture notes for the lecture
+My lecture notes taken for the lecture py4ds
