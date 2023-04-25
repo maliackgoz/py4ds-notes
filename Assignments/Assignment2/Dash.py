@@ -9,11 +9,11 @@ import pandas as pd
 paragraph1 = "I had trouble finding a free dataset for Türkiye, so I decided to focus my project on analyzing global, Europe, North America, and Japan sales, using a dataset I already had. I may explore Türkiye in the future, but for now, not having access to the right dataset could hinder my project's success. If companies face similar issues, they may need to create their own datasets for specific needs."
 paragraph2 = "If I had access to a Türkiye dataset, I planned to analyze the correlation between the country's economy and the popularity of certain video games globally, but not in Türkiye. For example, I wanted to explore why the Zelda series, popular globally, is not as popular in Türkiye due to limited Nintendo console users."
 paragraph3 = "The dataset I selected combines sales and scores, allowing me to conduct regionalized analyses, important for my project's goals. This saves me time from merging separate datasets, making it beneficial to my project."
-paragraph4 = "Firstly, we can see what are the top 100 games most sold regionally."
+paragraph4 = "Firstly, we can see what are the most sold games for some regions which have global sales larger than 10 millions. (You can change between regions by using the dropdown.)"
 paragraph5 = "We can see that, except from Japan and Other countries, Wii Sports is the most sold game. So, why is that? Let's take a look."
 paragraph6 = "In Japan, Pokémon has a massive following and has been a cultural phenomenon for over two decades. This popularity is likely due to the franchise's origins in Japan and its ability to appeal to a wide audience, including children and adults. In contrast, Wii Sports may not have had the same cultural relevance in Japan, despite its success in other regions."
 paragraph7 = "As for the Other countries (such as Middle East), Grand Theft Auto (GTA) is popular because of its open-world gameplay and its ability to allow players to experience a world that they may not be able to in real life. Additionally, the series' gritty and mature themes, which include crime and violence, may appeal to some audiences in the region. Wii Sports, on the other hand, may not have the same level of appeal due to its family-friendly nature and lack of mature themes."
-paragraph8 = "Furthermore, lets take a look top 17 most sold games."
+paragraph8 = "Furthermore, lets take a look to the most sold games which have global sales larger than 25 millions. (You can change between regions by using the dropdown.)"
 
 df = pd.read_csv("Assignments\Assignment2\Video_Games_Sales_as_at_22_Dec_2016.csv")
 
@@ -57,7 +57,7 @@ fig1 = px.bar(
     sales_df,
     y='EU_Sales',
     x='Name',
-    title="Top 100 Most Sold Video Games until 2016 - Sales by Game",
+    title="Most Sold Video Games until 2016 (larger than 10 millions) - Sales by Game",
     hover_data=[sales_df['Global_Sales']],
     labels={'EU_Sales': 'Sales (million)', 'Global_Sales': 'Global Sales (million)'},
 )
@@ -79,7 +79,7 @@ fig2 = px.pie(
     sales_df2,
     names='Name',
     values='EU_Sales',
-    title="Top 17 Most Sold Video Games until 2016 - Sales by Game",
+    title="Most Sold Video Games until 2016 (larger than 20 millions) - Sales by Game",
     hover_data=[sales_df2['Global_Sales']],
     labels={'EU_Sales': 'Sales (million)', 'Global_Sales': 'Global Sales (million)'},
 )
@@ -119,7 +119,7 @@ def update_sales_graph1(region):
         sales_df,
         y=region,
         x='Name',
-        title="Top 100 Most Sold Video Games until 2016 - Sales by Game",
+        title="Most Sold Video Games until 2016 (larger than 10 millions) - Sales by Game",
         hover_data=[sales_df['Global_Sales']],
         labels={region: 'Sales (million)', 'Global_Sales': 'Global Sales (million)'},
     )
@@ -135,7 +135,7 @@ def update_sales_graph2(region):
         sales_df2,
         names='Name',
         values=region,
-        title="Top 17 Most Sold Video Games until 2016 - Sales by Game",
+        title="Most Sold Video Games until 2016 (larger than 20 millions) - Sales by Game",
         hover_data=[sales_df2['Global_Sales']],
         labels={region: 'Sales (million)', 'Global_Sales': 'Global Sales (million)'},
     )
