@@ -34,7 +34,7 @@ paragraph5 = "We can see that, except from Japan and Other countries, Wii Sports
 paragraph6 = "In Japan, Pokémon has a massive following and has been a cultural phenomenon for over two decades. This popularity is likely due to the franchise's origins in Japan and its ability to appeal to a wide audience, including children and adults. In contrast, Wii Sports may not have had the same cultural relevance in Japan, despite its success in other regions."
 paragraph7 = "As for the Other countries (such as Middle East), Grand Theft Auto (GTA) is popular because of its open-world gameplay and its ability to allow players to experience a world that they may not be able to in real life. Additionally, the series' gritty and mature themes, which include crime and violence, may appeal to some audiences in the region."
 
-paragraph8 = "Firstly, it is evident that North America's sales generate the largest portion of sales in terms of numbers. This can be attributed to the fact that the United States has the world's largest economy, which is the primary reason for this situation. Additionally, this trend can also be observed in countries outside of the USA, EU, and Japan, where both sales numbers and economies are relatively lower."
+paragraph8 = "Firstly, it is evident that North America's sales generate the largest portion of sales in terms of numbers. This can be attributed to both the fact that the United States has one of the world's largest economies and the fact that the gaming culture has evolved extensively in North America. Additionally, this trend can also be observed in countries outside of the NA, EU, and Japan, where both sales numbers and economies are relatively lower."
 paragraph9 = "Secondly, it is apparent that the most popular genre in every region, except Japan, is action games. However, in Japan, RPGs (role-playing games) take the lead as the most popular genre. This is because Japanese gaming culture has developed around a strong affinity for role-playing games. Furthermore, unlike other countries, Japanese gamers generally have less interest in shooter games. Therefore, it can be concluded that if a video game company intends to target the Asian market, they should prioritize producing RPGs rather than shooters."
 paragraph10 = "Lastly, it is evident that globally, genres such as strategy, adventure, puzzle, simulation, and fighting are not as popular compared to action and RPG genres."
 
@@ -88,12 +88,14 @@ fig1 = px.bar(
     color_continuous_scale="Viridis"
 )
 
+fig1.update_layout(height=600)
+
 # Create a layout for the plots
 col1, col2, col3 = st.columns(3)
 
 with col1:
     # Render the first plot with the bar chart
-    st.plotly_chart(fig1)
+    st.plotly_chart(fig1, height=600)
 
 with col3:
     st.write("\n")
@@ -103,8 +105,7 @@ with col3:
     st.write(paragraph5)
     st.write(paragraph6)
     st.write("Japan is embracing its own culture. In that case, a game can be developed based on newly popularized concepts within their culture.")
-
-st.write(paragraph7)
+    st.write(paragraph7)
 
 st.header("Most Popular (Sold) Genres")
 st.write("Now, we will look for the most popular genres in different regions.")
@@ -118,16 +119,20 @@ region_options2 = {
     'Other Sales': 'Other_Sales'
 }
 
-# Create the second dropdown menu for the bar chart
-dropdown2 = st.selectbox('Select a region', list(region_options2.keys()), key='region_dropdown')
+col0, col00 = st.columns(2)
+
+with col0:
+    # Create the second dropdown menu for the bar chart
+    dropdown2 = st.selectbox('Select a region', list(region_options2.keys()), index=2)
 
 fig2 = px.scatter(
     genre_sales,
     x="Genre",
     y=region_options2[dropdown2],
     size="Global_Sales",
+    title="Most Sold Video Game Genres until 2016 - Sales by Genre",
     color="Global_Sales",
-    labels={'x': 'Genre', 'y': 'Sales (million)'}
+    labels={'y': 'Sales (million)'}
 )
 
 # Update the scatter plot based on the selected region
@@ -139,17 +144,40 @@ fig2.update_traces(
 # Define the color scale for fading
 fig2.update_layout(coloraxis=dict(colorscale='Bluered'))
 
+gdp_df = pd.read_csv("Assignments/Assignment2/GDP_by_Country_2017.csv")
+gdp_df = gdp_df.drop(["Index"], axis=1)
+gdp_df = gdp_df[["Country", "GDP_pc"]].head(30)
+
+gdp_df["GDP_pc"] = gdp_df["GDP_pc"].map(lambda x: x.lstrip('$'))
+gdp_df["GDP_pc"] = gdp_df["GDP_pc"].str.replace(',', '')
+gdp_df["GDP_pc"] = gdp_df["GDP_pc"].astype(float)
+
+gdp_df = gdp_df.sort_values(by=["GDP_pc"], ascending=False).reset_index().drop(["index"], axis=1)
+
+region = ["EU", "EU", "NA", "EU", "Others", "EU", "EU", "Others", "EU", "EU", "Others", "EU", "EU", "Japan", "EU", "Others", "EU", "Others", "Others", "EU", "Others", "Others", "Others", "Others", "Others", "Others", "Others", "Others", "Others", "Others"]
+gdp_df["Region"] = region
+
+
+# Create scatter plot
+fig3 = px.scatter(
+    gdp_df, x="Country", y="GDP_pc", color="Region", hover_name="Country",
+    labels={"GDP_pc": "GDP per capita"}, title="GDP per Capita by Country - 2017 (https://www.worldometers.info/gdp/gdp-by-country/)"
+)
+
+# Update color scale
+fig3.update_traces(marker=dict(size=12))
+
+
 # Create a layout for the plots
-col4, col5, col6 = st.columns(3)
+col4, col5 = st.columns(2)
 
 with col4:
     # Display the scatter plot
     st.plotly_chart(fig2)
-
-with col6:
-    st.write("\n")
-    st.write("\n")
     st.write(paragraph8)
-    st.write(paragraph9)
 
+with col5:
+    st.plotly_chart(fig3)
+    st.write(paragraph9)
+    
 st.write(paragraph10)
