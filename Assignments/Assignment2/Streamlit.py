@@ -30,7 +30,7 @@ paragraph3 = "The dataset I selected combines sales and scores, allowing me to c
 
 paragraph4 = "Firstly, we can see what the most popular games are for some regions that have global sales greater than 10 million. We need to consider that these sales are cumulative data until 2016. So, newer games have less sales. We will make our analysis with respect to this important information."
 
-paragraph5 = "We can see that, except from Japan and Other countries, Wii Sports is the most sold game. So, why is that? Let's take a look."
+paragraph5 = "We can see that, except in Japan and other countries, Wii Sports is the most popular game. So, why is that? Let's take a look."
 paragraph6 = "In Japan, Pokémon has a massive following and has been a cultural phenomenon for over two decades. This popularity is likely due to the franchise's origins in Japan and its ability to appeal to a wide audience, including children and adults. In contrast, Wii Sports may not have had the same cultural relevance in Japan, despite its success in other regions."
 paragraph7 = "As for the Other countries (such as Middle East), Grand Theft Auto (GTA) is popular because of its open-world gameplay and its ability to allow players to experience a world that they may not be able to in real life. Additionally, the series' gritty and mature themes, which include crime and violence, may appeal to some audiences in the region."
 
