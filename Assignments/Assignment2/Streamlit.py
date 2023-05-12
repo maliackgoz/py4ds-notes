@@ -39,7 +39,7 @@ paragraph9 = "Secondly, it is apparent that the most popular genre in every regi
 paragraph10 = "Lastly, it is evident that globally, genres such as strategy, adventure, puzzle, simulation, and fighting are not as popular compared to action and RPG genres."
 
 # Render the header with an emoji
-st.title("The Use of Big Data for Understanding the Video Game Market 🎮📈")
+st.title("The Uses of Big Data for Understanding the Video Game Market 🎮📈")
 st.write(paragraph_intro)
 st.write("Let's dive into the data.")
 
