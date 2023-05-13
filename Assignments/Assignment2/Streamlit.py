@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 
 # Render the Streamlit app first
 st.set_page_config(
@@ -22,7 +23,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-file_path = "Assignments/Assignment2/paragraphs.txt"  # Replace with the actual file path
+# Read the paragraphs from a text file
+file_path = "Assignments/Assignment2/paragraphs.txt"
 
 with open(file_path, "r") as file:
     paragraphs = file.readlines()
@@ -40,7 +42,7 @@ paragraph9 = paragraphs[9].strip()
 paragraph10 = paragraphs[10].strip()
 
 
-# Render the header with an emoji
+# Render the header
 st.title("The Use of Big Data for Understanding the Video Game Market 🎮📈")
 st.write(paragraph_intro)
 st.write("Let's dive into the data.")
@@ -48,7 +50,7 @@ st.write("Let's dive into the data.")
 # Render section: Most Popular (Sold) Games
 st.header("Most Popular (Sold) Games")
 st.write(paragraph4)
-st.info("You can change between regions by using the dropdown.")
+st.info("You can change between regions by using the dropdowns.")
 
 # Load the dataset
 df = pd.read_csv("Assignments/Assignment2/Video_Games_Sales_as_at_22_Dec_2016.csv")
@@ -109,9 +111,10 @@ with col3:
     st.write("Japan is embracing its own culture and cultural products. In that case, a game can be developed based on newly popularized concepts within their culture.")
     st.write(paragraph7)
 
+st.divider()
+
 st.header("Most Popular (Sold) Genres")
 st.write("Now, we will look for the most popular genres in different regions.")
-st.info("You can change between regions by using the dropdown.")
 
 # Define the dropdown2 options for regions
 region_options2 = {
@@ -127,6 +130,8 @@ with col0:
     # Create the second dropdown menu for the bar chart
     dropdown2 = st.selectbox('Select a region', list(region_options2.keys()), index=2)
 
+
+# Create the scatter plot with fading colors to demonstrate Genres
 fig2 = px.scatter(
     genre_sales,
     x="Genre",
@@ -150,17 +155,18 @@ gdp_df = pd.read_csv("Assignments/Assignment2/GDP_by_Country_2017.csv")
 gdp_df = gdp_df.drop(["Index"], axis=1)
 gdp_df = gdp_df[["Country", "GDP_pc"]].head(30)
 
+# Set GPD_pc column to sort the df by it
 gdp_df["GDP_pc"] = gdp_df["GDP_pc"].map(lambda x: x.lstrip('$'))
 gdp_df["GDP_pc"] = gdp_df["GDP_pc"].str.replace(',', '')
 gdp_df["GDP_pc"] = gdp_df["GDP_pc"].astype(float)
 
 gdp_df = gdp_df.sort_values(by=["GDP_pc"], ascending=False).reset_index().drop(["index"], axis=1)
 
+# Manual input of regions since the df did not have it
 region = ["EU", "EU", "NA", "EU", "Others", "EU", "EU", "Others", "EU", "EU", "Others", "EU", "EU", "Japan", "EU", "Others", "EU", "Others", "Others", "EU", "Others", "Others", "Others", "Others", "Others", "Others", "Others", "Others", "Others", "Others"]
 gdp_df["Region"] = region
 
-
-# Create scatter plot
+# Create a second scatter plot to demonstrate GDP per capita
 fig3 = px.scatter(
     gdp_df, x="Country", y="GDP_pc", color="Region", hover_name="Country",
     labels={"GDP_pc": "GDP per capita"}, title="GDP per Capita by Country - 2017 (https://www.worldometers.info/gdp/gdp-by-country/)"
@@ -183,3 +189,68 @@ with col5:
     st.write(paragraph9)
     
 st.write(paragraph10)
+
+st.divider()
+
+st.header("Most Popular (Sold) Studios")
+
+studio_sales = df.groupby(["Publisher"])[["Global_Sales"]].sum().reset_index()
+studio_sales = studio_sales.sort_values("Global_Sales", ascending=False).reset_index(drop=True)
+studio_sales = studio_sales.head(10)
+
+# Define colors for the funnel sections
+colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+          "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"]
+
+# Create the funnel chart
+fig4 = go.Figure(go.Funnel(
+    y=studio_sales["Publisher"],
+    x=studio_sales["Global_Sales"],
+    text=studio_sales["Global_Sales"],
+    textinfo="value+percent initial",
+    marker=dict(color=colors),
+    connector=dict(line=dict(color="white", width=2))
+))
+
+# Set the chart title and font settings
+fig4.update_layout(
+    title="Top 10 Studios by Global Sales"
+)
+
+# Customize the layout
+fig4.update_layout(
+    funnelmode="stack",
+    hoverlabel=dict(font_size=12)
+)
+
+studio_sales_regioned = df.groupby(["Publisher"])[["NA_Sales", "EU_Sales", "JP_Sales", "Other_Sales", "Global_Sales"]].sum().reset_index()
+
+studio_sales_regioned = studio_sales_regioned.sort_values("Global_Sales", ascending=False).reset_index(drop=True)
+studio_sales_regioned.drop(["Global_Sales"], axis=1, inplace=True)
+studio_sales_regioned = studio_sales_regioned.head(20)
+
+# Define the dropdown options for regions
+region_options3 = {
+    'North America Sales': 'NA_Sales',
+    'Europe Sales': 'EU_Sales',
+    'Japan Sales': 'JP_Sales',
+    'Other Sales': 'Other_Sales'
+}
+
+st.plotly_chart(fig4)
+
+dropdown3 = st.selectbox('Select a region', list(region_options3.keys()), index=3)
+
+fig5 = px.bar(
+    studio_sales_regioned,
+    y=region_options[dropdown3],
+    x='Publisher',
+    title="Top 20 Studios by Global Sales - Regioned",
+    labels={region_options[dropdown3]: 'Sales (million)'},
+    color=region_options[dropdown3],
+    color_continuous_scale="Agsunset"
+)
+
+fig5.update_layout(height=600)
+
+st.plotly_chart(fig5)
