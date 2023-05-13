@@ -24,7 +24,7 @@ st.markdown(
 )
 
 # Read the paragraphs from a text file
-file_path = "Assignments/Assignment2/paragraphs.txt"
+file_path = "Sources/paragraphs.txt"
 
 with open(file_path, "r") as file:
     paragraphs = file.readlines()
@@ -53,7 +53,7 @@ st.write(paragraph4)
 st.info("You can change between regions by using the dropdowns.")
 
 # Load the dataset
-df = pd.read_csv("Assignments/Assignment2/Video_Games_Sales_as_at_22_Dec_2016.csv")
+df = pd.read_csv("Sources/Datasets/Video_Games_Sales_as_at_22_Dec_2016.csv")
 
 # Create a new dataframe with sales data grouped by game and region
 sales_df = df.groupby(["Name"])[["NA_Sales", "EU_Sales", "JP_Sales", "Other_Sales", "Global_Sales"]].sum().reset_index()
@@ -151,7 +151,7 @@ fig2.update_traces(
 # Define the color scale for fading
 fig2.update_layout(coloraxis=dict(colorscale='Bluered'))
 
-gdp_df = pd.read_csv("Assignments/Assignment2/GDP_by_Country_2017.csv")
+gdp_df = pd.read_csv("Sources/Datasets/GDP_by_Country_2017.csv")
 gdp_df = gdp_df.drop(["Index"], axis=1)
 gdp_df = gdp_df[["Country", "GDP_pc"]].head(30)
 
@@ -198,17 +198,13 @@ studio_sales = df.groupby(["Publisher"])[["Global_Sales"]].sum().reset_index()
 studio_sales = studio_sales.sort_values("Global_Sales", ascending=False).reset_index(drop=True)
 studio_sales = studio_sales.head(10)
 
-# Define colors for the funnel sections
-colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
-          "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"]
-
 # Create the funnel chart
 fig4 = go.Figure(go.Funnel(
     y=studio_sales["Publisher"],
     x=studio_sales["Global_Sales"],
     text=studio_sales["Global_Sales"],
     textinfo="value+percent initial",
-    marker=dict(color=colors),
+    marker=dict(color="#1f77b4"),
     connector=dict(line=dict(color="white", width=2))
 ))
 
