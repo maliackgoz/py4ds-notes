@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 
 # Render the Streamlit app first
 st.set_page_config(
-    page_title="The Use of Big Data for Understanding the Video Game Market",
+    page_title="The Use of Data for Understanding the Video Game Market",
     page_icon="🎮",
     layout="wide"
 )
@@ -40,7 +40,7 @@ paragraph7 = paragraphs[7].strip()
 
 
 # Render the header
-st.title("The Use of Big Data for Understanding the Video Game Market 🎮📈")
+st.title("The Use of Data for Understanding the Video Game Market 🎮📈")
 st.write(paragraph_intro)
 st.write("Let's dive into the data.")
 
@@ -163,16 +163,24 @@ gdp_df["GDP_pc"] = gdp_df["GDP_pc"].astype(float)
 gdp_df = gdp_df.sort_values(by=["GDP_pc"], ascending=False).reset_index().drop(["index"], axis=1)
 
 # Manual input of regions since the df did not have it
-region = ["EU", "EU", "NA", "EU", "Others", "EU", "EU", "Others", "EU", "EU", "Others", "EU", "EU", "Japan", "EU", "Others", "EU", "Others", "Others", "EU", "Others", "Others", "Others", "Others", "Others", "Others", "Others", "Others", "Others", "Others"]
+region = ["EU", "EU", "NA", "EU", "Others", "EU", "EU", "NA", "EU", "EU", "Others", "EU", "EU", "Japan", "EU", "Others", "EU", "Others", "Others", "EU", "Others", "Others", "Others", "NA", "Others", "Others", "Others", "Others", "Others", "Others"]
 gdp_df["Region"] = region
 
-# Create a second scatter plot to demonstrate GDP per capita
+# Sort the DataFrame by GDP per capita
+gdp_df_sorted = gdp_df.sort_values('GDP_pc', ascending=False)
+
+# Define a custom color palette for dark background
+custom_colors = ['#58C9B9', '#FF5858', '#FFCA3A', '#9E66AB']
+
+# Create the scatter plot
 fig3 = px.scatter(
-    gdp_df, x="Country", y="GDP_pc", color="Region", hover_name="Country",
-    labels={"GDP_pc": "GDP per capita"}, title="GDP per Capita by Country - 2017"
+    gdp_df_sorted, x="Country", y="GDP_pc", color="Region", hover_name="Country",
+    labels={"GDP_pc": "GDP per capita"}, title="GDP per Capita (current US$) by Country - 2017",
+    category_orders={"Country": gdp_df_sorted['Country']},
+    color_discrete_sequence=custom_colors
 )
 
-# Update color scale
+# Update marker size
 fig3.update_traces(marker=dict(size=12))
 
 
