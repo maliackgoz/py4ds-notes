@@ -37,9 +37,6 @@ paragraph4 = paragraphs[4].strip()
 paragraph5 = paragraphs[5].strip()
 paragraph6 = paragraphs[6].strip()
 paragraph7 = paragraphs[7].strip()
-paragraph8 = paragraphs[8].strip()
-paragraph9 = paragraphs[9].strip()
-paragraph10 = paragraphs[10].strip()
 
 
 # Render the header
@@ -47,9 +44,9 @@ st.title("The Use of Big Data for Understanding the Video Game Market 🎮📈")
 st.write(paragraph_intro)
 st.write("Let's dive into the data.")
 
-# Render section: Most Popular (Sold) Games
-st.header("Most Popular (Sold) Games")
-st.write(paragraph4)
+# Render section: Most Popular Games
+st.header("Most Sold Games until 2016")
+st.write(paragraph1)
 st.info("You can change between regions by using the dropdowns.")
 
 # Load the dataset
@@ -86,11 +83,13 @@ fig1 = px.bar(
     sales_df,
     y=region_options[dropdown1],
     x='Name',
-    title="Most Sold Video Games until 2016 (larger than 10 million) - Sales by Game",
-    labels={region_options[dropdown1]: 'Sales (million)'},
+    title="Most Sold Video Games until 2016 (in million)",
     color=region_options[dropdown1],
     color_continuous_scale="Viridis"
 )
+
+# Update the y-axis label based on the selected region
+fig1.update_yaxes(title_text=dropdown1)
 
 fig1.update_layout(height=600)
 
@@ -106,15 +105,15 @@ with col3:
     st.write("\n")
     st.write("\n")
     st.write("\n")
-    st.write(paragraph5)
-    st.write(paragraph6)
+    st.write(paragraph2)
+    st.write(paragraph3)
     st.write("Japan is embracing its own culture and cultural products. In that case, a game can be developed based on newly popularized concepts within their culture.")
-    st.write(paragraph7)
+    st.write(paragraph4)
 
 st.divider()
 
-st.header("Most Popular (Sold) Genres")
-st.write("Now, we will look for the most popular genres in different regions.")
+st.header("Most Sold Genres until 2016")
+st.write("Now, we will be searching for the most sold genres in different regions. There are two figures below. The one on the left is demonstrating which genres are most popular regionally, and the one on the right side is demonstrating GDP per capita (https://www.worldometers.info/gdp/gdp-by-country/) for those regions.")
 
 # Define the dropdown2 options for regions
 region_options2 = {
@@ -137,9 +136,8 @@ fig2 = px.scatter(
     x="Genre",
     y=region_options2[dropdown2],
     size="Global_Sales",
-    title="Most Sold Video Game Genres until 2016 - Sales by Genre",
-    color="Global_Sales",
-    labels={'y': 'Sales (million)'}
+    title="Most Sold Video Game Genres until 2016 (in million)",
+    color="Global_Sales"
 )
 
 # Update the scatter plot based on the selected region
@@ -147,6 +145,8 @@ fig2.update_traces(
     marker=dict(line=dict(width=0.5, color='darkgray')),
     hovertemplate='<b>Genre</b>: %{x}<br><b>Sales</b>: %{y:.2f} million<br><b>Global Sales</b>: %{marker.size:.2f} million<br><extra></extra>'
 )
+
+fig2.update_yaxes(title_text=dropdown2)
 
 # Define the color scale for fading
 fig2.update_layout(coloraxis=dict(colorscale='Bluered'))
@@ -169,7 +169,7 @@ gdp_df["Region"] = region
 # Create a second scatter plot to demonstrate GDP per capita
 fig3 = px.scatter(
     gdp_df, x="Country", y="GDP_pc", color="Region", hover_name="Country",
-    labels={"GDP_pc": "GDP per capita"}, title="GDP per Capita by Country - 2017 (https://www.worldometers.info/gdp/gdp-by-country/)"
+    labels={"GDP_pc": "GDP per capita"}, title="GDP per Capita by Country - 2017"
 )
 
 # Update color scale
@@ -182,17 +182,18 @@ col4, col5 = st.columns(2)
 with col4:
     # Display the scatter plot
     st.plotly_chart(fig2)
-    st.write(paragraph8)
+    st.write(paragraph5)
 
 with col5:
     st.plotly_chart(fig3)
-    st.write(paragraph9)
+    st.write(paragraph6)
     
-st.write(paragraph10)
+st.write(paragraph7)
 
 st.divider()
 
-st.header("Most Popular (Sold) Studios")
+st.header("Best Selling Studios until 2016")
+st.write("Moreover, we will be searching for the best selling studios and their sales in different regions in the two figures below.")
 
 studio_sales = df.groupby(["Publisher"])[["Global_Sales"]].sum().reset_index()
 studio_sales = studio_sales.sort_values("Global_Sales", ascending=False).reset_index(drop=True)
@@ -204,13 +205,13 @@ fig4 = go.Figure(go.Funnel(
     x=studio_sales["Global_Sales"],
     text=studio_sales["Global_Sales"],
     textinfo="value+percent initial",
-    marker=dict(color="#1f77b4"),
+    marker=dict(color="#FF00FF"),
     connector=dict(line=dict(color="white", width=2))
 ))
 
 # Set the chart title and font settings
 fig4.update_layout(
-    title="Top 10 Studios by Global Sales"
+    title="Top 10 Studios by Global Sales (in million)"
 )
 
 # Customize the layout
@@ -239,13 +240,14 @@ dropdown3 = st.selectbox('Select a region', list(region_options3.keys()), index=
 
 fig5 = px.bar(
     studio_sales_regioned,
-    y=region_options[dropdown3],
+    y=region_options3[dropdown3],
     x='Publisher',
-    title="Top 20 Studios by Global Sales - Regioned",
-    labels={region_options[dropdown3]: 'Sales (million)'},
-    color=region_options[dropdown3],
+    title="Top 20 Studios by Regional Sales (in million)",
+    color=region_options3[dropdown3],
     color_continuous_scale="Agsunset"
 )
+
+fig5.update_yaxes(title_text=dropdown3)
 
 fig5.update_layout(height=600)
 
