@@ -30,20 +30,22 @@ with open(file_path, "r") as file:
     paragraphs = file.readlines()
 
 paragraph_intro = paragraphs[0].strip()
-paragraph1 = paragraphs[1].strip()
-paragraph2 = paragraphs[2].strip()
-paragraph3 = paragraphs[3].strip()
-paragraph4 = paragraphs[4].strip()
-paragraph5 = paragraphs[5].strip()
-paragraph6 = paragraphs[6].strip()
-paragraph7 = paragraphs[7].strip()
+paragraph_intro2 = paragraphs[1].strip()
+paragraph1 = paragraphs[2].strip()
+paragraph2 = paragraphs[3].strip()
+paragraph3 = paragraphs[4].strip()
+paragraph4 = paragraphs[5].strip()
+paragraph5 = paragraphs[6].strip()
+paragraph6 = paragraphs[7].strip()
+paragraph7 = paragraphs[8].strip()
 
-
+container1 = st.container()
 # Render the header
-st.title("The Use of Data for Understanding the Video Game Market 🎮📈")
-st.write(paragraph_intro)
-st.write("Let's dive into the data.")
+container1.title("The Use of Data for Understanding the Video Game Market 🎮📈")
+container1.write(paragraph_intro)
+container1.write(paragraph_intro2)
 
+container2 = st.container()
 # Render section: Most Popular Games
 st.header("Most Sold Games until 2016")
 st.write(paragraph1)
@@ -51,19 +53,15 @@ st.info("You can change between regions by using the dropdowns.")
 
 # Load the dataset
 df = pd.read_csv("Sources/Datasets/Video_Games_Sales_as_at_22_Dec_2016.csv")
-
 # Create a new dataframe with sales data grouped by game and region
 sales_df = df.groupby(["Name"])[["NA_Sales", "EU_Sales", "JP_Sales", "Other_Sales", "Global_Sales"]].sum().reset_index()
-
 # Filter the dataframe based on global sales
 sales_df = sales_df[sales_df['Global_Sales'] >= 10]
-
 # Sort the dataframe by global sales in descending order
 sales_df = sales_df.sort_values("Global_Sales", ascending=False).reset_index(drop=True)
 
 # Create a new dataframe with sales data grouped by genre and region
 genre_sales = df.groupby(["Genre"])[["NA_Sales", "EU_Sales", "JP_Sales", "Other_Sales", "Global_Sales"]].sum().reset_index()
-
 genre_sales = genre_sales.sort_values("Global_Sales", ascending=False).reset_index(drop=True)
 
 # Define the dropdown options for regions
@@ -113,7 +111,7 @@ with col3:
 st.divider()
 
 st.header("Most Sold Genres until 2016")
-st.write("Now, we will be searching for the most sold genres in different regions. There are two figures below. The one on the left is demonstrating which genres are most popular regionally, and the one on the right side is demonstrating GDP per capita (https://www.worldometers.info/gdp/gdp-by-country/) for those regions.")
+st.write("Now, we will be searching for the most sold genres in different regions. There are two figures below. The one on the left is demonstrating which genres are most popular regionally, and the one on the right side is demonstrating [GDP per capita](https://www.worldometers.info/gdp/gdp-by-country/) for those regions.")
 
 # Define the dropdown2 options for regions
 region_options2 = {
