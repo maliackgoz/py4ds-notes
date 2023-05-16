@@ -34,10 +34,15 @@ paragraph_intro2 = paragraphs[1].strip()
 paragraph1 = paragraphs[2].strip()
 paragraph2 = paragraphs[3].strip()
 paragraph3 = paragraphs[4].strip()
-paragraph4 = paragraphs[5].strip()
-paragraph5 = paragraphs[6].strip()
-paragraph6 = paragraphs[7].strip()
-paragraph7 = paragraphs[8].strip()
+paragraph4 = paragraphs[6].strip()
+paragraph5 = paragraphs[8].strip()
+paragraph6 = paragraphs[9].strip()
+paragraph7 = paragraphs[10].strip()
+paragraph8 = paragraphs[5].strip()
+paragraph9 = paragraphs[7].strip()
+paragraph10 = paragraphs[11].strip()
+paragraph11 = paragraphs[12].strip()
+paragraph12 = paragraphs[13].strip()
 
 container1 = st.container()
 # Render the header
@@ -45,7 +50,6 @@ container1.title("The Use of Data for Understanding the Video Game Market ðŸŽ®ðŸ
 container1.write(paragraph_intro)
 container1.write(paragraph_intro2)
 
-container2 = st.container()
 # Render section: Most Popular Games
 st.header("Most Sold Games until 2016")
 st.write(paragraph1)
@@ -64,6 +68,12 @@ sales_df = sales_df.sort_values("Global_Sales", ascending=False).reset_index(dro
 genre_sales = df.groupby(["Genre"])[["NA_Sales", "EU_Sales", "JP_Sales", "Other_Sales", "Global_Sales"]].sum().reset_index()
 genre_sales = genre_sales.sort_values("Global_Sales", ascending=False).reset_index(drop=True)
 
+total_sales = genre_sales.drop('Global_Sales', axis=1)
+total_sales = total_sales.drop('Genre', axis=1)
+
+# Create a new table with the sum of sales by column
+total_sales = pd.DataFrame(total_sales.sum(), columns=['Total_Sales'])
+
 # Define the dropdown options for regions
 region_options = {
     'Global Sales': 'Global_Sales',
@@ -74,7 +84,7 @@ region_options = {
 }
 
 # Create the first dropdown menu for the bar chart
-dropdown1 = st.selectbox('Select a region', list(region_options.keys()), index=1)
+dropdown1 = st.selectbox('Select a region', list(region_options.keys()), index=0)
 
 # Create the initial bar chart with fading colors
 fig1 = px.bar(
@@ -92,26 +102,26 @@ fig1.update_yaxes(title_text=dropdown1)
 fig1.update_layout(height=600)
 
 # Create a layout for the plots
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns((1.2, 1))
 
 with col1:
     # Render the first plot with the bar chart
     st.plotly_chart(fig1, height=600)
 
-with col3:
+with col2:
     st.write("\n")
     st.write("\n")
     st.write("\n")
     st.write("\n")
     st.write(paragraph2)
     st.write(paragraph3)
-    st.write("Japan is embracing its own culture and cultural products. In that case, a game can be developed based on newly popularized concepts within their culture.")
+    st.write(paragraph8)
     st.write(paragraph4)
 
 st.divider()
 
 st.header("Most Sold Genres until 2016")
-st.write("Now, we will be searching for the most sold genres in different regions. There are two figures below. The one on the left is demonstrating which genres are most popular regionally, and the one on the right side is demonstrating [GDP per capita](https://www.worldometers.info/gdp/gdp-by-country/) for those regions.")
+st.write(paragraph9)
 
 # Define the dropdown2 options for regions
 region_options2 = {
@@ -188,28 +198,35 @@ col4, col5 = st.columns(2)
 with col4:
     # Display the scatter plot
     st.plotly_chart(fig2)
-    st.write(paragraph5)
 
 with col5:
     st.plotly_chart(fig3)
+
+col6, col7 = st.columns((5,1))
+
+with col7:
+    st.subheader("Total Game Sales by Region")
+    st.dataframe(total_sales, width=400)
+
+with col6:
+    st.write(paragraph5)
     st.write(paragraph6)
-    
-st.write(paragraph7)
+    st.write(paragraph7)
 
 st.divider()
 
-st.header("Best Selling Studios until 2016")
-st.write("Moreover, we will be searching for the best selling studios and their sales in different regions in the two figures below.")
+st.header("Best Selling Publishers until 2016")
+st.write(paragraph10)
 
-studio_sales = df.groupby(["Publisher"])[["Global_Sales"]].sum().reset_index()
-studio_sales = studio_sales.sort_values("Global_Sales", ascending=False).reset_index(drop=True)
-studio_sales = studio_sales.head(10)
+publisher_sales = df.groupby(["Publisher"])[["Global_Sales"]].sum().reset_index()
+publisher_sales = publisher_sales.sort_values("Global_Sales", ascending=False).reset_index(drop=True)
+publisher_sales = publisher_sales.head(10)
 
 # Create the funnel chart
 fig4 = go.Figure(go.Funnel(
-    y=studio_sales["Publisher"],
-    x=studio_sales["Global_Sales"],
-    text=studio_sales["Global_Sales"],
+    y=publisher_sales["Publisher"],
+    x=publisher_sales["Global_Sales"],
+    text=publisher_sales["Global_Sales"],
     textinfo="value+percent initial",
     marker=dict(color="#FF00FF"),
     connector=dict(line=dict(color="white", width=2))
@@ -217,7 +234,7 @@ fig4 = go.Figure(go.Funnel(
 
 # Set the chart title and font settings
 fig4.update_layout(
-    title="Top 10 Studios by Global Sales (in million)"
+    title="Top 10 Publishers by Global Sales until 2016 (in million)"
 )
 
 # Customize the layout
@@ -226,29 +243,29 @@ fig4.update_layout(
     hoverlabel=dict(font_size=12)
 )
 
-studio_sales_regioned = df.groupby(["Publisher"])[["NA_Sales", "EU_Sales", "JP_Sales", "Other_Sales", "Global_Sales"]].sum().reset_index()
+publisher_sales_regioned = df.groupby(["Publisher"])[["NA_Sales", "EU_Sales", "JP_Sales", "Other_Sales", "Global_Sales"]].sum().reset_index()
 
-studio_sales_regioned = studio_sales_regioned.sort_values("Global_Sales", ascending=False).reset_index(drop=True)
-studio_sales_regioned.drop(["Global_Sales"], axis=1, inplace=True)
-studio_sales_regioned = studio_sales_regioned.head(20)
+publisher_sales_regioned = publisher_sales_regioned.sort_values("Global_Sales", ascending=False).reset_index(drop=True)
+publisher_sales_regioned.drop(["Global_Sales"], axis=1, inplace=True)
+publisher_sales_regioned = publisher_sales_regioned.head(20)
 
 # Define the dropdown options for regions
 region_options3 = {
     'North America Sales': 'NA_Sales',
     'Europe Sales': 'EU_Sales',
-    'Japan Sales': 'JP_Sales',
-    'Other Sales': 'Other_Sales'
+    'Other Sales': 'Other_Sales',
+    'Japan Sales': 'JP_Sales'
 }
 
-st.plotly_chart(fig4)
+col000, col0000 = st.columns((1, 1.1))
 
-dropdown3 = st.selectbox('Select a region', list(region_options3.keys()), index=3)
+dropdown3 = col000.selectbox('Select a region', list(region_options3.keys()), index=3)
 
 fig5 = px.bar(
-    studio_sales_regioned,
+    publisher_sales_regioned,
     y=region_options3[dropdown3],
     x='Publisher',
-    title="Top 20 Studios by Regional Sales (in million)",
+    title="Top 20 Publishers by Regional Sales until 2016 (in million)",
     color=region_options3[dropdown3],
     color_continuous_scale="Agsunset"
 )
@@ -257,4 +274,54 @@ fig5.update_yaxes(title_text=dropdown3)
 
 fig5.update_layout(height=600)
 
-st.plotly_chart(fig5)
+publishergame_sales = df.groupby(["Publisher", "Name"])[["Global_Sales"]].sum().reset_index()
+publishergame_sales = publishergame_sales.sort_values("Global_Sales", ascending=False).reset_index(drop=True)
+
+nintendo_sales = publishergame_sales.loc[publishergame_sales['Publisher'] == 'Nintendo']
+nintendo_sales = nintendo_sales.head(10).drop(["Publisher"], axis=1)
+nintendo_sales.index = range(1, len(nintendo_sales) + 1)
+
+ea_sales = publishergame_sales.loc[publishergame_sales['Publisher'] == 'Electronic Arts']
+ea_sales = ea_sales.head(10).drop(["Publisher"], axis=1)
+ea_sales.index = range(1, len(ea_sales) + 1)
+
+act_sales = publishergame_sales.loc[publishergame_sales['Publisher'] == 'Activision']
+act_sales = act_sales.head(10).drop(["Publisher"], axis=1)
+act_sales.index = range(1, len(act_sales) + 1)
+
+sony_sales = publishergame_sales.loc[publishergame_sales['Publisher'] == 'Sony Computer Entertainment']
+sony_sales = sony_sales.head(10).drop(["Publisher"], axis=1)
+sony_sales.index = range(1, len(sony_sales) + 1)
+
+ubi_sales = publishergame_sales.loc[publishergame_sales['Publisher'] == 'Ubisoft']
+ubi_sales = ubi_sales.head(10).drop(["Publisher"], axis=1)
+ubi_sales.index = range(1, len(ubi_sales) + 1)
+
+t2_sales = publishergame_sales.loc[publishergame_sales['Publisher'] == 'Take-Two Interactive']
+t2_sales = t2_sales.head(10).drop(["Publisher"], axis=1)
+t2_sales.index = range(1, len(t2_sales) + 1)
+
+with st.container():
+    col8, col9 = st.columns(2)
+    col9.plotly_chart(fig4)
+    col8.plotly_chart(fig5)
+    st.write(paragraph11)
+    st.write(paragraph12)
+    lcol1, lcol2, lcol3 = st.columns(3)
+    lcol4, lcol5, lcol6 = st.columns(3)
+    lcol1.write("Nintendo (in million)")
+    lcol1.dataframe(nintendo_sales)
+    lcol2.write("Electronic Arts (in million)")
+    lcol2.dataframe(ea_sales)
+    lcol3.write("Activision (in million)")
+    lcol3.dataframe(act_sales)
+    lcol4.write("Sony Computer Entertainment (in million)")
+    lcol4.dataframe(sony_sales)
+    lcol5.write("Ubisoft (in million)")
+    lcol5.dataframe(ubi_sales)
+    lcol6.write("Take-Two Interactive (in million)")
+    lcol6.dataframe(t2_sales)
+
+st.divider()
+st.header("Content Writer")
+st.write("Muhammed Ali Acikgoz: [Github](https://github.com/maliackgoz), [LinkedIn](https://www.linkedin.com/in/muhammedaliacikgoz)")
