@@ -91,13 +91,14 @@ fig1 = px.bar(
     sales_df,
     y=region_options[dropdown1],
     x='Name',
-    title="Most Sold Video Games until 2016 (in million)",
+    title="Most Sold Video Games until 2016 (in million $)",
     color=region_options[dropdown1],
     color_continuous_scale="Viridis"
 )
 
 # Update the y-axis label based on the selected region
-fig1.update_yaxes(title_text=dropdown1)
+# fig1.update_yaxes(title_text=dropdown1)
+fig1.update_yaxes(title_text=str(dropdown1) + " in million $")
 
 fig1.update_layout(height=600)
 
@@ -144,7 +145,7 @@ fig2 = px.scatter(
     x="Genre",
     y=region_options2[dropdown2],
     size="Global_Sales",
-    title="Most Sold Video Game Genres until 2016 (in million)",
+    title="Most Sold Video Game Genres until 2016 (in million $)",
     color="Global_Sales"
 )
 
@@ -154,7 +155,8 @@ fig2.update_traces(
     hovertemplate='<b>Genre</b>: %{x}<br><b>Sales</b>: %{y:.2f} million<br><b>Global Sales</b>: %{marker.size:.2f} million<br><extra></extra>'
 )
 
-fig2.update_yaxes(title_text=dropdown2)
+# fig2.update_yaxes(title_text=dropdown2)
+fig2.update_yaxes(title_text=str(dropdown2) + " in million $")
 
 # Define the color scale for fading
 fig2.update_layout(coloraxis=dict(colorscale='Bluered'))
@@ -183,7 +185,7 @@ custom_colors = ['#58C9B9', '#FF5858', '#FFCA3A', '#9E66AB']
 # Create the scatter plot
 fig3 = px.scatter(
     gdp_df_sorted, x="Country", y="GDP_pc", color="Region", hover_name="Country",
-    labels={"GDP_pc": "GDP per capita"}, title="GDP per Capita (current US$) by Country - 2017",
+    labels={"GDP_pc": "GDP per capita in $"}, title="GDP per Capita by Country - 2017",
     category_orders={"Country": gdp_df_sorted['Country']},
     color_discrete_sequence=custom_colors
 )
@@ -205,7 +207,7 @@ with col5:
 col6, col7 = st.columns((5,1))
 
 with col7:
-    st.subheader("Total Game Sales by Region")
+    st.subheader("Total Game Sales by Region (in million $)")
     st.dataframe(total_sales, width=400)
 
 with col6:
@@ -227,14 +229,13 @@ fig4 = go.Figure(go.Funnel(
     y=publisher_sales["Publisher"],
     x=publisher_sales["Global_Sales"],
     text=publisher_sales["Global_Sales"],
-    textinfo="value+percent initial",
-    marker=dict(color="#FF00FF"),
+    textinfo="value",
     connector=dict(line=dict(color="white", width=2))
 ))
 
 # Set the chart title and font settings
 fig4.update_layout(
-    title="Top 10 Publishers by Global Sales until 2016 (in million)"
+    title="Top 10 Publishers by Global Sales until 2016 (in million $)"
 )
 
 # Customize the layout
@@ -265,12 +266,12 @@ fig5 = px.bar(
     publisher_sales_regioned,
     y=region_options3[dropdown3],
     x='Publisher',
-    title="Top 20 Publishers by Regional Sales until 2016 (in million)",
+    title="Top 20 Publishers by Regional Sales until 2016 (in million $)",
     color=region_options3[dropdown3],
     color_continuous_scale="Agsunset"
 )
 
-fig5.update_yaxes(title_text=dropdown3)
+fig5.update_yaxes(title_text=str(dropdown3) + " in million $")
 
 fig5.update_layout(height=600)
 
@@ -309,17 +310,17 @@ with st.container():
     st.write(paragraph12)
     lcol1, lcol2, lcol3 = st.columns(3)
     lcol4, lcol5, lcol6 = st.columns(3)
-    lcol1.write("Nintendo (in million)")
+    lcol1.write("Nintendo Sales (in million $)")
     lcol1.dataframe(nintendo_sales)
-    lcol2.write("Electronic Arts (in million)")
+    lcol2.write("Electronic Arts Sales (in million $)")
     lcol2.dataframe(ea_sales)
-    lcol3.write("Activision (in million)")
+    lcol3.write("Activision Sales (in million $)")
     lcol3.dataframe(act_sales)
-    lcol4.write("Sony Computer Entertainment (in million)")
+    lcol4.write("Sony Computer Entertainment Sales (in million $)")
     lcol4.dataframe(sony_sales)
-    lcol5.write("Ubisoft (in million)")
+    lcol5.write("Ubisoft Sales (in million $)")
     lcol5.dataframe(ubi_sales)
-    lcol6.write("Take-Two Interactive (in million)")
+    lcol6.write("Take-Two Interactive Sales (in million $)")
     lcol6.dataframe(t2_sales)
 
 st.divider()
