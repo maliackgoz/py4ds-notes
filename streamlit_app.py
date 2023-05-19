@@ -91,14 +91,14 @@ fig1 = px.bar(
     sales_df,
     y=region_options[dropdown1],
     x='Name',
-    title="Most Sold Video Games until 2016 (in million $)",
+    title="Most Sold Video Games until 2016 (in million units)",
     color=region_options[dropdown1],
     color_continuous_scale="Viridis"
 )
 
 # Update the y-axis label based on the selected region
 # fig1.update_yaxes(title_text=dropdown1)
-fig1.update_yaxes(title_text=str(dropdown1) + " in million $")
+fig1.update_yaxes(title_text=str(dropdown1) + " in million units")
 
 fig1.update_layout(height=600)
 
@@ -145,7 +145,7 @@ fig2 = px.scatter(
     x="Genre",
     y=region_options2[dropdown2],
     size="Global_Sales",
-    title="Most Sold Video Game Genres until 2016 (in million $)",
+    title="Most Sold Video Game Genres until 2016 (in million units)",
     color="Global_Sales"
 )
 
@@ -156,7 +156,7 @@ fig2.update_traces(
 )
 
 # fig2.update_yaxes(title_text=dropdown2)
-fig2.update_yaxes(title_text=str(dropdown2) + " in million $")
+fig2.update_yaxes(title_text=str(dropdown2) + " in million units")
 
 # Define the color scale for fading
 fig2.update_layout(coloraxis=dict(colorscale='Bluered'))
@@ -207,7 +207,7 @@ with col5:
 col6, col7 = st.columns((5,1))
 
 with col7:
-    st.subheader("Total Game Sales by Region (in million $)")
+    st.subheader("Total Game Sales by Region (in million units)")
     st.dataframe(total_sales, width=400)
 
 with col6:
@@ -235,7 +235,7 @@ fig4 = go.Figure(go.Funnel(
 
 # Set the chart title and font settings
 fig4.update_layout(
-    title="Top 10 Publishers by Global Sales until 2016 (in million $)"
+    title="Top 10 Publishers by Global Sales until 2016 (in million units)"
 )
 
 # Customize the layout
@@ -266,12 +266,12 @@ fig5 = px.bar(
     publisher_sales_regioned,
     y=region_options3[dropdown3],
     x='Publisher',
-    title="Top 20 Publishers by Regional Sales until 2016 (in million $)",
+    title="Top 20 Publishers by Regional Sales until 2016 (in million units)",
     color=region_options3[dropdown3],
     color_continuous_scale="Agsunset"
 )
 
-fig5.update_yaxes(title_text=str(dropdown3) + " in million $")
+fig5.update_yaxes(title_text=str(dropdown3) + " in million units")
 
 fig5.update_layout(height=600)
 
@@ -310,17 +310,17 @@ with st.container():
     st.write(paragraph12)
     lcol1, lcol2, lcol3 = st.columns(3)
     lcol4, lcol5, lcol6 = st.columns(3)
-    lcol1.write("Nintendo Sales (in million $)")
+    lcol1.write("Nintendo Sales (in million units)")
     lcol1.dataframe(nintendo_sales)
-    lcol2.write("Electronic Arts Sales (in million $)")
+    lcol2.write("Electronic Arts Sales (in million units)")
     lcol2.dataframe(ea_sales)
-    lcol3.write("Activision Sales (in million $)")
+    lcol3.write("Activision Sales (in million units)")
     lcol3.dataframe(act_sales)
-    lcol4.write("Sony Computer Entertainment Sales (in million $)")
+    lcol4.write("Sony Computer Entertainment Sales (in million units)")
     lcol4.dataframe(sony_sales)
-    lcol5.write("Ubisoft Sales (in million $)")
+    lcol5.write("Ubisoft Sales (in million units)")
     lcol5.dataframe(ubi_sales)
-    lcol6.write("Take-Two Interactive Sales (in million $)")
+    lcol6.write("Take-Two Interactive Sales (in million units)")
     lcol6.dataframe(t2_sales)
 
 st.divider()
